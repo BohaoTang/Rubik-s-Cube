@@ -1,1 +1,1 @@
-# Ploting Rubik's Cubes
+# Plot Rubik's Cubes
