@@ -1,6 +1,7 @@
 import numpy as np
 import turtle as t 
 import time
+import random
 
 class RubikCube():
 # '''
@@ -36,6 +37,10 @@ class RubikCube():
 		for co in self.coordinate:
 			self.status[co] = co
 		self.coordinate = np.array(self.coordinate).reshape(6,3,3)
+
+		formula_list = ['R', 'E', 'L', 'F', 'B', 'U', 'D', 'M', 'S']
+		extention = ['2', "'"]
+		self.formulas = [i for i in formula_list] + [i + j for i in formula_list for j in extention]
 		
 
 	#foundemantal rotations
@@ -143,7 +148,12 @@ class RubikCube():
 
 	#transform from a formula
 	def formula(self, fstr):
-		formulas = fstr.split()
+		if isinstance(fstr, str):
+			formulas = fstr.split()
+		elif isinstance(fstr, list):
+			formulas = fstr
+		else:
+			raise KeyError('')
 		for act in formulas:
 			self.do(act,ifshow=0)
 		self.show()
@@ -188,7 +198,7 @@ class RubikCube():
 					t.end_fill()
 					t.forward(50*3/dimension)
 			
-			n = len(fillcolors)/dimension
+			n = int(len(fillcolors)/dimension)
 			for i in range(n):
 				plot_a_row(angle,pencolor,fillcolors[dimension*i:dimension*(i+1)],dimension)
 				t.up()
@@ -212,7 +222,7 @@ class RubikCube():
 			t.pensize(2)
 			t.speed(0)
 			
-			for i in xrange(6):
+			for i in range(6):
 				blockslist = blocksarray(self.coordinate[i],dimension)
 				fillcolors = [colordict[self.status[x][0]] for x in blockslist]
 				t.up()
@@ -234,7 +244,9 @@ class RubikCube():
 if __name__ == '__main__':
 	cube = RubikCube()
 	# cube.show()
+	n = 20
+	formula = [random.choice(cube.formulas) for i in range(n)]
 	start = time.time()
-	cube.formula('R')
+	cube.formula(formula)
 	end = time.time()
 	print(end - start)
