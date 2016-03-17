@@ -157,7 +157,7 @@ class RubikCube():
 		pass
 
 	#show
-	def show(self,color=['yellow','red','blue','purple','orange','green'],notation=None,exfaces=None,\
+	def show(self,color=['yellow','red','blue','#CCCCFF','orange','green'],notation=None,exfaces=None,\
 			 movement=None,arrow=None,dimension=3,pencolor='black'):
 		colordict = {}
 		for facecolor in list(zip(self.faces,color)):
@@ -170,8 +170,6 @@ class RubikCube():
 								   		 [(-160*np.sqrt(3),235),30,120],\
 								   		 [(90*np.sqrt(3),310),330,60]]
 
-		t.clearscreen()
-		
 		def plot_a_face(angle, pencolor, fillcolors, dimension):
 			t.down()
 			
@@ -199,30 +197,34 @@ class RubikCube():
 				t.forward(50*3/dimension)
 				t.left(angle)
 				t.down()
-
-		t.color('black')
-		t.pensize(2)
-		t.speed(0)
-
-		def blocksarray(colors,dimension):
-			if dimension == 2:
-				return [colors[0,0],colors[0,2],colors[2,0],colors[2,2]]
-			else:
-				return colors.reshape(9)
 		
-		for i in xrange(6):
-			blockslist = blocksarray(self.coordinate[i],dimension)
-			fillcolors = [colordict[self.status[x][0]] for x in blockslist]
-			t.up()
-			t.goto(coordinate_heading_angle_list[i][0])
-			t.setheading(coordinate_heading_angle_list[i][1])
-			t.down()
-			plot_a_face(coordinate_heading_angle_list[i][2],pencolor,fillcolors,dimension)
+		def blocksarray(colors,dimension):
+				if dimension == 2:
+					return [colors[0,0],colors[0,2],colors[2,0],colors[2,2]]
+				else:
+					return colors.reshape(9)
 
-		t.up()
-		t.goto(0,500)
-		t.done()
-		time.sleep(3)
+		try:
+			t.clearscreen()
+		
+		finally:
+			t.color('black')
+			t.pensize(2)
+			t.speed(0)
+			
+			for i in xrange(6):
+				blockslist = blocksarray(self.coordinate[i],dimension)
+				fillcolors = [colordict[self.status[x][0]] for x in blockslist]
+				t.up()
+				t.goto(coordinate_heading_angle_list[i][0])
+				t.setheading(coordinate_heading_angle_list[i][1])
+				t.down()
+				plot_a_face(coordinate_heading_angle_list[i][2],pencolor,fillcolors,dimension)
+
+			t.up()
+			t.goto(0,500)
+			t.done()
+			time.sleep(3)
 
 
 	#show a formula
