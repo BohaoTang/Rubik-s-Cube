@@ -1,18 +1,18 @@
 import numpy as np
 import matplotlib.pyplot as plt 
+import time
 
 class RubikCube():
-'''
-	from RubikCube import RubikCube
-	cube = RubikCube()
-	cube.show() to show the cube
-	cube.do('act') to do a rotation, 
-	act is showed in picture n1.jpg
-	cube.formula() to transform from a formula
-	formula is like "act act act" 
-	the cube will show itself whenever you transform it 
-'''
-
+# '''
+# 	from RubikCube import RubikCube
+# 	cube = RubikCube()
+# 	cube.show() to show the cube
+# 	cube.do('act') to do a rotation, 
+# 	act is showed in picture n1.jpg
+# 	cube.formula() to transform from a formula
+# 	formula is like "act act act" 
+# 	the cube will show itself whenever you transform it 
+# '''
 	status = {}
 	
 	faces = ['u','r','f','d','l','b']
@@ -48,7 +48,7 @@ class RubikCube():
 			for y in zipface:
 				if set(x) == set(y):
 					uedgeAUX.append(y)
-		uedge = zip(uedge,uedgeAUX)
+		uedge = list(zip(uedge,uedgeAUX))
 
 		redge = self.coordinate[self.faces.index(face)][:,2]
 		zipface = self.positions[face][self.zipdict['right'][0]][self.zipdict['right'][1]]
@@ -58,7 +58,7 @@ class RubikCube():
 			for y in zipface:
 				if set(x) == set(y):
 					redgeAUX.append(y)
-		redge = zip(redge,redgeAUX)
+		redge = list(zip(redge,redgeAUX))
 
 		dedge = self.coordinate[self.faces.index(face)][2,:][::-1]
 		zipface = self.positions[face][self.zipdict['down'][0]][self.zipdict['down'][1]]
@@ -68,7 +68,7 @@ class RubikCube():
 			for y in zipface:
 				if set(x) == set(y):
 					dedgeAUX.append(y)
-		dedge = zip(dedge,dedgeAUX)
+		dedge = list(zip(dedge,dedgeAUX))
 
 		ledge = self.coordinate[self.faces.index(face)][:,0][::-1]
 		zipface = self.positions[face][self.zipdict['left'][0]][self.zipdict['left'][1]]
@@ -78,7 +78,7 @@ class RubikCube():
 			for y in zipface:
 				if set(x) == set(y):
 					ledgeAUX.append(y)
-		ledge = zip(ledge,ledgeAUX)
+		ledge = list(zip(ledge,ledgeAUX))
 		return uedge,redge,dedge,ledge
 
 	def find_middle(self,pos):
@@ -161,8 +161,19 @@ class RubikCube():
 			 movement=None,arrow=None,dimension=3):
 		cube = [self.status[x][0] for x in self.coordinate.reshape(54)]
 		cube = np.array(cube).reshape(6,3,3)
-		print cube
+		print(cube)
 
 	#show a formula
 	def fshow(self,color='default',formula=None,notation=None,dimension=3):
 		pass
+
+if __name__ == '__main__':
+	cube = RubikCube()
+	# cube.show()
+	formula = 'R'
+	for i in range(10000):
+		formula += ' R'
+	start = time.time()
+	cube.formula(str(formula))
+	end = time.time()
+	print(end - start)
