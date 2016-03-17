@@ -1,5 +1,5 @@
 import numpy as np
-import matplotlib.pyplot as plt 
+import turtle as t 
 import time
 
 class RubikCube():
@@ -157,11 +157,73 @@ class RubikCube():
 		pass
 
 	#show
-	def show(self,color=['y','b','r','bk','g','o'],notation=None,exfaces=None,\
-			 movement=None,arrow=None,dimension=3):
-		cube = [self.status[x][0] for x in self.coordinate.reshape(54)]
-		cube = np.array(cube).reshape(6,3,3)
-		print(cube)
+	def show(self,color=['yellow','red','blue','purple','orange','green'],notation=None,exfaces=None,\
+			 movement=None,arrow=None,dimension=3,pencolor='black'):
+		colordict = {}
+		for facecolor in list(zip(self.faces,color)):
+			colordict[facecolor[0]] = facecolor[1]
+
+		coordinate_heading_angle_list = [[(0,225),330,120],\
+										 [(0,75),30,120],\
+										 [(-75*np.sqrt(3),150),330,60],\
+								   		 [(0,-100),330,120],\
+								   		 [(-160*np.sqrt(3),235),30,120],\
+								   		 [(90*np.sqrt(3),310),330,60]]
+
+		t.clearscreen()
+		
+		def plot_a_face(angle, pencolor, fillcolors, dimension):
+			t.down()
+			
+			def plot_a_row(angle, pencolor, fillcolors,dimension):
+				for i in range(len(fillcolors)):
+					t.color(pencolor, fillcolors[i])
+					t.begin_fill()
+					t.forward(50*3/dimension)
+					t.right(angle)
+					t.forward(50*3/dimension)
+					t.right(180 - angle)
+					t.forward(50*3/dimension)
+					t.right(angle)
+					t.forward(50*3/dimension)
+					t.right(180 - angle)
+					t.end_fill()
+					t.forward(50*3/dimension)
+			
+			n = len(fillcolors)/dimension
+			for i in range(n):
+				plot_a_row(angle,pencolor,fillcolors[dimension*i:dimension*(i+1)],dimension)
+				t.up()
+				t.backward(150)
+				t.right(angle)
+				t.forward(50*3/dimension)
+				t.left(angle)
+				t.down()
+
+		t.color('black')
+		t.pensize(2)
+		t.speed(0)
+
+		def blocksarray(colors,dimension):
+			if dimension == 2:
+				return [colors[0,0],colors[0,2],colors[2,0],colors[2,2]]
+			else:
+				return colors.reshape(9)
+		
+		for i in xrange(6):
+			blockslist = blocksarray(self.coordinate[i],dimension)
+			fillcolors = [colordict[self.status[x][0]] for x in blockslist]
+			t.up()
+			t.goto(coordinate_heading_angle_list[i][0])
+			t.setheading(coordinate_heading_angle_list[i][1])
+			t.down()
+			plot_a_face(coordinate_heading_angle_list[i][2],pencolor,fillcolors,dimension)
+
+		t.up()
+		t.goto(0,500)
+		t.done()
+		time.sleep(3)
+
 
 	#show a formula
 	def fshow(self,color='default',formula=None,notation=None,dimension=3):
@@ -170,10 +232,7 @@ class RubikCube():
 if __name__ == '__main__':
 	cube = RubikCube()
 	# cube.show()
-	formula = 'R'
-	for i in range(10000):
-		formula += ' R'
 	start = time.time()
-	cube.formula(str(formula))
+	cube.formula('R')
 	end = time.time()
 	print(end - start)
