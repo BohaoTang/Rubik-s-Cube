@@ -2,6 +2,17 @@ import numpy as np
 import matplotlib.pyplot as plt 
 
 class RubikCube():
+'''
+	from RubikCube import RubikCube
+	cube = RubikCube()
+	cube.show() to show the cube
+	cube.do('act') to do a rotation, 
+	act is showed in picture n1.jpg
+	cube.formula() to transform from a formula
+	formula is like "act act act" 
+	the cube will show itself whenever you transform it 
+'''
+
 	status = {}
 	
 	faces = ['u','r','f','d','l','b']
