@@ -110,7 +110,7 @@ class RubikCube():
 		else:
 			for i in range(3):
 				self.status[a[i]],self.status[b[i]],self.status[c[i]],self.status[d[i]] = \
-				self.status[b[i]],self.status[c[i]],self.status[d[i]],self.status[a[i]],self.status[b[i]],self.status[c[i]]
+				self.status[b[i]],self.status[c[i]],self.status[d[i]],self.status[a[i]]
 
 	def do(self,act,ifshow = 1):
 		if len(act) > 2: 
